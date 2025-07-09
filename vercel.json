@@ -3,7 +3,7 @@
     {
       "src": "backend/src/main.py",
       "use": "@vercel/python",
-      "config": { "runtime": "python3.9" } // Ou "python3.10", "python3.11" se souber a versão exata
+      "config": { "runtime": "python3.9" } // 
     },
     {
       "src": "backend/src/static/**",
