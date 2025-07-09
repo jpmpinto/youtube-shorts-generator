@@ -5,7 +5,7 @@ apt-get update && apt-get install -y ffmpeg
 
 # Continue with Vercel's default build process for Python
 # This will install dependencies from requirements.txt
-python3 -m pip install -r backend/requirements.txt
+/usr/local/bin/python -m pip install -r backend/requirements.txt
 
 # Build frontend (if not already built and copied)
 # Since we already built frontend and copied to backend/src/static, this might not be strictly necessary
