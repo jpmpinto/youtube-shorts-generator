@@ -1,44 +1,30 @@
-# Dockerfile para YouTube to Shorts Generator
+# Use a imagem base oficial do Python
+FROM python:3.9-slim-buster
 
-FROM python:3.11-slim
-
-# Instalar dependências do sistema
+# Instalar dependências do sistema (incluindo ffmpeg)
 RUN apt-get update && apt-get install -y \
     ffmpeg \
-    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalar Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs
-
-# Instalar pnpm
-RUN npm install -g pnpm
-
-# Definir diretório de trabalho
+# Definir o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copiar ficheiros do projeto
-COPY . .
+# Copiar o backend para o container
+COPY backend/ /app/backend/
 
-# Instalar dependências do frontend e fazer build
-WORKDIR /app/frontend
-RUN pnpm install
-RUN pnpm run build
-
-# Copiar build para o backend
-RUN cp -r dist/* ../backend/src/static/
-
-# Mudar para o diretório backend
+# Mudar para o diretório do backend
 WORKDIR /app/backend
 
-# Criar ambiente virtual e instalar dependências
-RUN python -m venv venv
-RUN . venv/bin/activate && pip install -r requirements.txt
+# Instalar dependências Python
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expor porta
+# Copiar o frontend estático para o diretório static do backend
+# Assumimos que o frontend já foi buildado e copiado para backend/src/static localmente antes do deploy
+# Se não, você precisaria de um passo de build do frontend aqui ou garantir que o build do frontend é feito antes do deploy
+# Para o Vercel, o ideal é que o frontend já esteja na pasta static do backend
+
+# Expor a porta que o Flask vai usar
 EXPOSE 5000
 
-# Comando para executar a aplicação
-CMD ["/bin/bash", "-c", "source venv/bin/activate && python src/main.py"]
-
+# Comando para iniciar a aplicação Flask
+CMD ["python", "src/main.py"]
