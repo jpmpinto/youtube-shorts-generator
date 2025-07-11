@@ -3,7 +3,8 @@
     {
       "src": "backend/src/main.py",
       "use": "@vercel/python",
-      "config": { "runtime": "python3.9" }
+      "config": { "runtime": "python3.9" },
+      "installCommand": "apt-get update && apt-get install -y ffmpeg && pip install -r backend/requirements.txt"
     },
     {
       "src": "backend/src/static/**",
